@@ -15,10 +15,21 @@ MongoClient.connect(mongoConnnectionString, {useUnifiedTopology: true})
 
         const carBrandsCollection = db.collection('cars-collection') // collection name
 
+        app.set('view engine', 'ejs') // tell express were using ejs template  !!!! comes before use,get or post
+
         app.use(bodyParser.urlencoded({extended: true}))
 
+        app.use(express.static('public'))
+
         app.get('/' , (req, res) => {
-            res.sendFile(__dirname + '/index.html')
+
+            /** fetching data from the database */
+            db.collection('cars-collection').find().toArray()
+                .then(results => {
+                    console.log(results)
+                    res.render('index.ejs', {cars : results})
+                })
+                .catch(error => console.error(error))
         })
 
         app.post('/' , (req, res) => {

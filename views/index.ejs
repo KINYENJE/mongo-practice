@@ -15,5 +15,18 @@
         <input type="text" placeholder="Enter year of manufacture" name="year">
         <input type="submit">
     </form>
+
+    <h2> The car brands you own are :  </h2>
+        <%= cars %>
+    <ul class="cars">
+        <% for (var i=0; i < cars.length; i++) {%>
+            <li class="car">
+                <span><%= cars[i].name %></span>
+                <span><%= cars[i].brand %></span>
+                <span><%= cars[i].year %></span>
+            </li>
+        <% } %>    
+        
+    </ul>
 </body>
 </html>
