@@ -51,7 +51,9 @@ async function updatePrice() {
         })
     
         const data = await response.json()
+       
         location.reload()
+        alert(data)
     } catch (error) {
         console.log('error on client side')
     }
