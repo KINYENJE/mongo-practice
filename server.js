@@ -1,10 +1,12 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
+const PORT = 2121
+require('dotenv').config()
 
 const MongoClient = require('mongodb').MongoClient
 
-const mongoConnnectionString =  'mongodb+srv://kinyenje:trustworthiness01@cluster0.aramigj.mongodb.net/?retryWrites=true&w=majority'
+const mongoConnnectionString =  process.env.DB_STRING
 
 
 MongoClient.connect(mongoConnnectionString, {useUnifiedTopology: true})
@@ -19,12 +21,14 @@ MongoClient.connect(mongoConnnectionString, {useUnifiedTopology: true})
 
         app.use(bodyParser.urlencoded({extended: true}))
 
+        app.use(express.json())  // Middleware for parsing JSON body
+
         app.use(express.static('public'))
 
         app.get('/' , (req, res) => {
 
             /** fetching data from the database */
-            db.collection('cars-collection').find().toArray()
+            db.collection('cars-collection').find().sort({year:1}).toArray() /** sort({year:1}). -1 sorts in descending order */
                 .then(results => {
                     console.log(results)
                     res.render('index.ejs', {cars : results})
@@ -45,7 +49,41 @@ MongoClient.connect(mongoConnnectionString, {useUnifiedTopology: true})
             res.redirect('/')
         })
 
-        app.listen(2121, () => {
+        app.delete('/deleteCar' , (req, res) => {
+            console.log(req.body)
+            carBrandsCollection.deleteOne({name: req.body.carModel})
+            .then(result => {
+
+                if (result.deletedCount ===0){
+                    return res.json('No quote to be deleted')
+                }
+                console.log(result)
+                res.json('car deleted')
+            })
+
+            .catch(error => console.error(error))
+        })
+
+        app.put('/updatePrice' , (req, res) => {
+            carBrandsCollection.updateOne(
+                {name: req.body.carModel,
+                year: req.body.YOM,
+                brand: req.body.carBrand
+                },
+                { 
+                    $set: {price: req.body.carPrice}
+                })
+            .then(result => {
+                console.log(result)
+                if (result.modifiedCount ===0){
+                    return res.json('No price to be updated')
+                }
+                res.json('price updated')
+            })
+            .catch(error => console.error(error))
+        })
+
+        app.listen(process.env.PORT || PORT, () => {
             console.log('Running on 2121')
         })
     })

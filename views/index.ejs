@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Cars list</title>
     <link rel="stylesheet" href="/styles/styles.css">
 </head>
 <body>
@@ -13,20 +13,29 @@
         <input type="text" placeholder="Enter car name" name="name">
         <input type="text" placeholder="Enter car brand" name="brand">
         <input type="text" placeholder="Enter year of manufacture" name="year">
-        <input type="submit">
+        <input type="submit"> <br> <br>
+      <input type="number" placeholder="Enter price in USD" name="price" class="priceField">
     </form>
 
     <h2> The car brands you own are :  </h2>
-        <%= cars %>
+        <!-- <%= cars %> -->
     <ul class="cars">
         <% for (var i=0; i < cars.length; i++) {%>
             <li class="car">
-                <span><%= cars[i].name %></span>
-                <span><%= cars[i].brand %></span>
-                <span><%= cars[i].year %></span>
+                <span class="brandName"><%= cars[i].brand %></span>
+                <span class="modelName"><%= cars[i].name %></span>
+                <span class="year"><%= cars[i].year %></span> 
+                <span class="year"><iconify-icon icon="solar:dollar-bold"></iconify-icon><%= cars[i].price %></span> 
+                <span class="delBtn"><iconify-icon icon="icon-park-twotone:delete-one"></iconify-icon></span>
+                <span class="updateBtn"><button><iconify-icon icon="dashicons:update-alt" flip="vertical"></iconify-icon> update payment</button></span>
+
             </li>
         <% } %>    
         
     </ul>
+
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+
+    <script src="/js/main.js"></script>
 </body>
 </html>
